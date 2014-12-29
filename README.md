@@ -28,7 +28,6 @@ As not many people on the project have (any) experience, especially with mobile 
 **Install Android Studio**
 - The most recent version can be found here: http://developer.android.com/sdk/index.html
 - If you have a previous version installed then you can either update or uninstall/reinstall
--
 
 **Install SourceTree/GitHub**
 - These are two good Git clients that I know of, feel free to use a different one or just use the command line, but I probably will be less help if you do so
