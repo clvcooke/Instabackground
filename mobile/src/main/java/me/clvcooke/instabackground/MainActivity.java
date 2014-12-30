@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,7 +35,6 @@ public class MainActivity extends ActionBarActivity {
 
 
         //TODO don't do this
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
                 try{
                     title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username);
                 }catch (IOException e) {
-                    Toast.makeText(view.getContext(), "Unable to Load Instagram", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -84,6 +84,15 @@ public class MainActivity extends ActionBarActivity {
                 }
 
                 String rssURL = RSS_URL_PREFIX + username;
+                List<String> urls;
+                try {
+                    urls = UtilityMethods.getImageURLSFromRSS(rssURL, 10);
+                }catch(IOException e){
+                    Toast.makeText(view.getContext(), "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
 
 
 
