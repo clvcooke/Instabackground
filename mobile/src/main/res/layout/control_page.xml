@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout"
+        android:gravity="center">
+
+        <Button
+            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:text="Find Pictures"
+            android:id="@+id/search_intro_button"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/primary_text_default_material_light"
+            android:textSize="22sp"
+            android:
+            android:background="@drawable/instatop"/>
+
+        <Button
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Your Photos"
+            android:id="@+id/pictures_intro_button"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/primary_text_default_material_dark"
+            android:textSize="22sp"
+            android:background="@drawable/instabottom"/>
+    </LinearLayout>
