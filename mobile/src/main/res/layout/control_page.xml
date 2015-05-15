@@ -21,7 +21,6 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/primary_text_default_material_light"
             android:textSize="22sp"
-            android:
             android:background="@drawable/instatop"/>
 
         <Button

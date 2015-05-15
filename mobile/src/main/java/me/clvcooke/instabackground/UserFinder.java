@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,7 @@ import java.util.List;
 public class UserFinder extends ActionBarActivity {
 
     private EditText usernameTextView;
-    private final String INSTAGRAM_URL_PREFIX = "http://instagram.com/";
+    private final String INSTAGRAM_URL_PREFIX = "https://instagram.com/";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,11 +41,12 @@ public class UserFinder extends ActionBarActivity {
 
 
         Button button = (Button) findViewById(R.id.search_button);
+        final EditText textField = (EditText) findViewById(R.id.username);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameTextView.getText().toString();
+                String username = textField.getText().toString();
                 Context context = view.getContext();
                 int pictureNum;
 
@@ -55,13 +57,12 @@ public class UserFinder extends ActionBarActivity {
                     username = username.replaceAll("\\s", ""); //replacing all spaces in the string
                 }
 
-
                 String title;
 
                 try{
-                    title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username);
+                    title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username + "/");
                 }catch (IOException e) {
-                    Toast.makeText(context, "Unable to Load Instagram User", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Instagram cannot be reached", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -82,6 +83,7 @@ public class UserFinder extends ActionBarActivity {
                 }catch(IOException e){
                     Toast.makeText(context, "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
+                    Log.e("INSTA",e.getMessage());
                     return;
                 }
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +26,7 @@ public class UtilityMethods {
     public static final String IMAGE_FILE_NAME_PREFIX = "instagram-photo-";
     public static final String COUNT_STRING = "ImageCount";
     public static final String IMAGE_DIR = "imageDir";
+    public static final String IMAGE_SEARCH_STRING = "standard_resolution";
 
     public static String getPageTitle(String url) throws IOException{
         Document document = Jsoup.connect(url).timeout(3000).userAgent("Mozilla/17.0").get();
@@ -68,36 +70,14 @@ public class UtilityMethods {
 
 
     public static List<String> getURLS(String pageURL,int amount) throws IOException {
-
         List<String> urls = new ArrayList<String>();
-
-        Document document = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get();
-
-        String megaString = document.toString();
-
+        String megaString  = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get().toString();
         int prev = 0;
-
-        //TODO more efficient?
+        //TODO this depends heavily on instagrams page format, lets just hope it doesn't break
         for(int i = 0; i < amount; i++){
-            prev = megaString.indexOf("alt_media_url",prev+1);
-            int start = megaString.indexOf("http",prev);
-            int end = megaString.indexOf(",",start) -1;
-
-            String minorLink = megaString.substring(start,end).replace(String.valueOf('\\'),"");
-
-            Document imagePage = Jsoup.connect(minorLink).timeout(3000).userAgent("Mozilla/17.0").get();
-            String megaString2 = imagePage.toString();
-
-
-            start = megaString2.indexOf("og:image");
-            start = megaString2.indexOf("=", start) +2;
-            end = megaString2.indexOf(".jpg",start)+4;
-            urls.add(megaString2.substring(start,end));
-
+            prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length() + 10;
+            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -1).replace(String.valueOf('/'), ""));
         }
-
-        System.out.println(Integer.toString(urls.size()));
-
         return urls;
     }
 
