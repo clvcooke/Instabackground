@@ -45,6 +45,8 @@ public class ImageGridAdapter extends BaseAdapter {
         }else{
             imageView = (ImageView) convertView;
         }
+
+        imageView.setImageDrawable(mContext.getResources().getDrawable();
         
         return null;
     }
