@@ -67,8 +67,6 @@ public class UtilityMethods {
 
     }
 
-
-
     public static List<String> getURLS(String pageURL,int amount) throws IOException {
         List<String> urls = new ArrayList<String>();
         String megaString  = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get().toString();

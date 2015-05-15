@@ -13,8 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Toast;
 
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +38,9 @@ public class UserFinder extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_page);
 
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
+
 
         //TODO don't do this
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -42,6 +49,7 @@ public class UserFinder extends ActionBarActivity {
 
         Button button = (Button) findViewById(R.id.search_button);
         final EditText textField = (EditText) findViewById(R.id.username);
+        GridView gridView = (GridView) findViewById(R.id.gridView);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,16 +82,12 @@ public class UserFinder extends ActionBarActivity {
                     return;
                 }
 
-
-
-
                 List<String> urls;
                 try {
                     urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username,20);
                 }catch(IOException e){
                     Toast.makeText(context, "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
-                    Log.e("INSTA",e.getMessage());
                     return;
                 }
 
