@@ -62,24 +62,19 @@ public class ImageGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
-        if(convertView == null){
+        if (convertView == null) {
             imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setPadding(0,0,0,0);
-        }else{
+            imageView.setPadding(0, 0, 0, 0);
+        } else {
             imageView = (ImageView) convertView;
         }
 
-<<<<<<< HEAD
-        imageView.setImageDrawable(mContext.getResources().getDrawable();
-        
-        return null;
-=======
+
         imageView.setAdjustViewBounds(true);
 
-        ImageLoader.getInstance().displayImage((String) getItem(position), imageView,options);
+        ImageLoader.getInstance().displayImage((String) getItem(position), imageView, options);
 
         return imageView;
->>>>>>> 8fcbb58f9eda66d61c88931999424c7d22ec0429
     }
 }
