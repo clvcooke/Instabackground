@@ -74,7 +74,7 @@ public class UtilityMethods {
         //TODO this depends heavily on instagrams page format, lets just hope it doesn't break
         for(int i = 0; i < amount; i++){
             prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length() + 10;
-            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -1).replace(String.valueOf('/'), ""));
+            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -1).replace(String.valueOf('\\'), ""));
         }
         return urls;
     }

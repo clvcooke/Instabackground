@@ -17,9 +17,6 @@ public class ControlPage extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_page);
 
-
-
-
         final Context context = this;
         Button searchButton = (Button) findViewById(R.id.search_intro_button);
         Button photosButton = (Button) findViewById(R.id.pictures_intro_button);
