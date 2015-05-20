@@ -4,6 +4,10 @@
     android:layout_height="match_parent">
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8fcbb58f9eda66d61c88931999424c7d22ec0429
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,11 +15,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android: android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal"
+=======
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal" />
+>>>>>>> 8fcbb58f9eda66d61c88931999424c7d22ec0429
 
         <GridView
             android:layout_width="match_parent"
@@ -26,9 +38,16 @@
             />
 
 
+<<<<<<< HEAD
 
 
     </LinearLayout>
 
 
 </LinearLayout>
+=======
+    </LinearLayout>
+
+
+</LinearLayout>
+>>>>>>> 8fcbb58f9eda66d61c88931999424c7d22ec0429

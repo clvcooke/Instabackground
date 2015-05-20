@@ -8,25 +8,50 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.List;
+
 /**
  * Created by Colin on 2015-05-14.
  */
 public class ImageGridAdapter extends BaseAdapter {
 
     private Context mContext;
+    private List<String> mUrls;
+    private DisplayImageOptions options;
+
 
     public ImageGridAdapter(Context c) {
         mContext = c;
+
+        options = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.noimage)
+                .showImageOnFail(R.drawable.noimage)
+                .showImageOnLoading(R.drawable.noimage)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+    }
+
+    public void setUrls(List<String> urls){
+        mUrls = urls;
     }
 
     @Override
     public int getCount() {
+        if(mUrls != null){
+          return mUrls.size();
+        }
         return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        if(mUrls == null || position >= mUrls.size()){
+            return null;
+        }
+        return mUrls.get(position);
     }
 
     @Override
@@ -39,15 +64,22 @@ public class ImageGridAdapter extends BaseAdapter {
         ImageView imageView;
         if(convertView == null){
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85,85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             imageView.setPadding(0,0,0,0);
         }else{
             imageView = (ImageView) convertView;
         }
 
+<<<<<<< HEAD
         imageView.setImageDrawable(mContext.getResources().getDrawable();
         
         return null;
+=======
+        imageView.setAdjustViewBounds(true);
+
+        ImageLoader.getInstance().displayImage((String) getItem(position), imageView,options);
+
+        return imageView;
+>>>>>>> 8fcbb58f9eda66d61c88931999424c7d22ec0429
     }
 }

@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
-
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -32,6 +30,7 @@ public class UserFinder extends ActionBarActivity {
 
     private EditText usernameTextView;
     private final String INSTAGRAM_URL_PREFIX = "https://instagram.com/";
+    private ImageGridAdapter imageGridAdapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,7 +39,6 @@ public class UserFinder extends ActionBarActivity {
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
-
 
         //TODO don't do this
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -51,47 +49,56 @@ public class UserFinder extends ActionBarActivity {
         final EditText textField = (EditText) findViewById(R.id.username);
         GridView gridView = (GridView) findViewById(R.id.gridView);
 
+        imageGridAdapter = new ImageGridAdapter(this);
+        gridView.setAdapter(imageGridAdapter);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String username = textField.getText().toString();
-                Context context = view.getContext();
-                int pictureNum;
+            public void onClick(final View view) {
 
-                if(username.isEmpty()) {
-                    Toast.makeText(context, "Invalid - Empty name", Toast.LENGTH_SHORT).show();
-                    return;
-                }else if(username.contains(" ")){
-                    username = username.replaceAll("\\s", ""); //replacing all spaces in the string
-                }
+                (new Runnable() {
+                    @Override
+                    public void run() {
+                        String username = textField.getText().toString();
+                        Context context = view.getContext();
 
-                String title;
+                        if (username.isEmpty()) {
+                            Toast.makeText(context, "Invalid - Empty name", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (username.contains(" ")) {
+                            username = username.replaceAll("\\s", ""); //replacing all spaces in the string
+                        }
 
-                try{
-                    title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username + "/");
-                }catch (IOException e) {
-                    Toast.makeText(context, "Instagram cannot be reached", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        String title;
 
-                //TODO find better way to check if user exists
-                if(!title.contains("Page Not Found")){
-                 Toast.makeText(context, "Valid user", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        try {
+                            title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username + "/");
+                        } catch (IOException e) {
+                            Toast.makeText(context, "Instagram cannot be reached", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                List<String> urls;
-                try {
-                    urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username,20);
-                }catch(IOException e){
-                    Toast.makeText(context, "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                    return;
-                }
+                        //TODO find better way to check if user exists
+                        if (!title.contains("Page Not Found")) {
+                            Toast.makeText(context, "Valid user", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                new LoadPictureTask(context).execute(urls);
+                        List<String> urls;
+                        try {
+                            urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username, 20);
+                        } catch (IOException e) {
+                            Toast.makeText(context, "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                            return;
+                        }
+
+                        imageGridAdapter.setUrls(urls);
+
+                    }
+                }).run();
             }
         });
 
@@ -124,39 +131,38 @@ public class UserFinder extends ActionBarActivity {
 
         private Context m_context;
 
-        public LoadPictureTask(Context context){
+        public LoadPictureTask(Context context) {
             m_context = context;
         }
 
         @Override
         protected List<Bitmap> doInBackground(List<String>... urls) {
 
-            List<Bitmap>bitmaps = new ArrayList<Bitmap>();
-
+            List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
 
             return bitmaps;
         }
 
         @Override
-        protected void onPostExecute(List<Bitmap> bitmaps){
+        protected void onPostExecute(List<Bitmap> bitmaps) {
 
 
             UtilityMethods.setWallpaper(m_context, bitmaps.get(0));
 
-            for(int i = 0; i < bitmaps.size(); i++){
+            for (int i = 0; i < bitmaps.size(); i++) {
                 ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
 
                 File directory = contextWrapper.getDir(UtilityMethods.IMAGE_DIR, Context.MODE_PRIVATE);
 
-                File path = new File(directory, UtilityMethods.IMAGE_FILE_NAME_PREFIX + Integer.toString(i+1));
+                File path = new File(directory, UtilityMethods.IMAGE_FILE_NAME_PREFIX + Integer.toString(i + 1));
 
                 FileOutputStream fos = null;
 
-                try{
+                try {
                     fos = new FileOutputStream(path);
 
-                    bitmaps.get(i).compress(Bitmap.CompressFormat.PNG,100,fos);
+                    bitmaps.get(i).compress(Bitmap.CompressFormat.PNG, 100, fos);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -165,21 +171,14 @@ public class UserFinder extends ActionBarActivity {
             }
 
 
-
-
-
-
             AlarmReceiver alarmReceiver = new AlarmReceiver();
 
-           // alarmReceiver.setAlarm(timeInSeconds,m_context,bitmaps.size());
+            // alarmReceiver.setAlarm(timeInSeconds,m_context,bitmaps.size());
 
-            Toast.makeText(m_context,"alarm set", Toast.LENGTH_SHORT).show();
+            Toast.makeText(m_context, "alarm set", Toast.LENGTH_SHORT).show();
 
         }
     }
-
-
-
 
 
 }

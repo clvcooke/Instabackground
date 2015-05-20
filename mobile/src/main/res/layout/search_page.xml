@@ -36,6 +36,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:numColumns="3"
+        android:horizontalSpacing="0dp"
+        android:verticalSpacing="0dp"
         android:stretchMode="columnWidth"/>
 
 </RelativeLayout>
