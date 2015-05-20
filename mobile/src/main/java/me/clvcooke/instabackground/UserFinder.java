@@ -37,13 +37,9 @@ public class UserFinder extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_page);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
-
         //TODO don't do this
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
 
         Button button = (Button) findViewById(R.id.search_button);
         final EditText textField = (EditText) findViewById(R.id.username);

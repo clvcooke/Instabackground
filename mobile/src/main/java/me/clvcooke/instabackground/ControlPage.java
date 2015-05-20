@@ -7,6 +7,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 /**
  * Created by Colin on 2015-05-13.
  */
@@ -16,6 +19,10 @@ public class ControlPage extends ActionBarActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_page);
+
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
 
         final Context context = this;
         Button searchButton = (Button) findViewById(R.id.search_intro_button);
@@ -32,7 +39,7 @@ public class ControlPage extends ActionBarActivity {
         photosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UserFinder.class);
+                Intent intent = new Intent(context, PhotoDisplayer.class);
                 startActivity(intent);
             }
         });

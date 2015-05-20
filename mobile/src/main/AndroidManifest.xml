@@ -17,6 +17,11 @@
             android:label="@string/app_name" >
         </activity>
 
+        <activity android:name=".PhotoDisplayer"
+            android:label="@string/app_name">
+
+        </activity>
+
         <activity android:name=".ControlPage"
             android:label="@string/app_name">
             <intent-filter>
@@ -25,6 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
 
         <receiver android:name="me.clvcooke.instabackground.AlarmReceiver"></receiver>
 

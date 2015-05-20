@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Michael on 15/05/2015.
  */
@@ -20,6 +23,14 @@ public class PhotoDisplayer extends ActionBarActivity {
 
         TextView textView = (TextView) findViewById(R.id.textView);
         GridView photoGrid = (GridView) findViewById(R.id.pictureGrid);
+
+        ImageGridAdapter imageGridAdapter = new ImageGridAdapter(this);
+        photoGrid.setAdapter(imageGridAdapter);
+
+        List<String> list = new ArrayList<>();
+        list.add("drawable://" + R.drawable.instabottom);
+
+        imageGridAdapter.setUrls(list);
     };
 
 

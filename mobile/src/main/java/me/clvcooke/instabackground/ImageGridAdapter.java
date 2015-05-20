@@ -22,7 +22,6 @@ public class ImageGridAdapter extends BaseAdapter {
     private List<String> mUrls;
     private DisplayImageOptions options;
 
-
     public ImageGridAdapter(Context c) {
         mContext = c;
 
@@ -34,21 +33,21 @@ public class ImageGridAdapter extends BaseAdapter {
                 .build();
     }
 
-    public void setUrls(List<String> urls){
+    public void setUrls(List<String> urls) {
         mUrls = urls;
     }
 
     @Override
     public int getCount() {
-        if(mUrls != null){
-          return mUrls.size();
+        if (mUrls != null) {
+            return mUrls.size();
         }
         return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        if(mUrls == null || position >= mUrls.size()){
+        if (mUrls == null || position >= mUrls.size()) {
             return null;
         }
         return mUrls.get(position);
@@ -65,16 +64,15 @@ public class ImageGridAdapter extends BaseAdapter {
         if (convertView == null) {
             imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setPadding(0, 0, 0, 0);
+            imageView.setPadding(5, 5, 5, 5);
         } else {
             imageView = (ImageView) convertView;
         }
 
+        
 
         imageView.setAdjustViewBounds(true);
-
         ImageLoader.getInstance().displayImage((String) getItem(position), imageView, options);
-
         return imageView;
     }
 }
