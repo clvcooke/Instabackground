@@ -2,16 +2,24 @@ package me.clvcooke.instabackground;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.security.Policy;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import me.clvcooke.instabackground.Views.OverlayToggleView;
 
 /**
  * Created by Colin on 2015-05-14.
@@ -21,20 +29,27 @@ public class ImageGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<String> mUrls;
     private DisplayImageOptions options;
+    private LayoutInflater mInflator;
+    private List<Boolean> isToggled;
 
     public ImageGridAdapter(Context c) {
         mContext = c;
-
+        mInflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         options = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.noimage)
                 .showImageOnFail(R.drawable.noimage)
                 .showImageOnLoading(R.drawable.noimage)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
+
     }
 
     public void setUrls(List<String> urls) {
         mUrls = urls;
+        isToggled = new ArrayList<>();
+        for(int i = 0; i < mUrls.size(); i++){
+            isToggled.add(false);
+        }
     }
 
     @Override
@@ -58,21 +73,30 @@ public class ImageGridAdapter extends BaseAdapter {
         return 0;
     }
 
+    public void onItemClick(View view, int position){
+        boolean visible = isToggled.get(position);
+        ImageView overlay = (ImageView) view.findViewById(R.id.overlay);
+        overlay.setVisibility(visible ? View.INVISIBLE : View.VISIBLE);
+        isToggled.set(position, overlay.getVisibility() == View.VISIBLE);
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ImageView image;
+        final FrameLayout layout;
         if (convertView == null) {
-            imageView = new ImageView(mContext);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setPadding(5, 5, 5, 5);
+            layout = (FrameLayout) mInflator.inflate(R.layout.image_view_overlay, null);
+            image = (ImageView) layout.findViewById(R.id.image);
+            image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            image.setPadding(5, 5, 5, 5);
         } else {
-            imageView = (ImageView) convertView;
+            layout = (FrameLayout) convertView;
+            image = (ImageView) layout.findViewById(R.id.image);
         }
 
-        
-
-        imageView.setAdjustViewBounds(true);
-        ImageLoader.getInstance().displayImage((String) getItem(position), imageView, options);
-        return imageView;
+        layout.findViewById(R.id.overlay).setVisibility(isToggled.get(position) ?  View.VISIBLE : View.INVISIBLE);
+        image.setAdjustViewBounds(true);
+        ImageLoader.getInstance().displayImage((String) getItem(position), image, options);
+        return layout;
     }
 }

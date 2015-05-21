@@ -3,6 +3,7 @@ package me.clvcooke.instabackground;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -37,29 +39,33 @@ public class UserFinder extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_page);
 
-        //TODO don't do this
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         Button button = (Button) findViewById(R.id.search_button);
         final EditText textField = (EditText) findViewById(R.id.username);
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+        final GridView gridView = (GridView) findViewById(R.id.gridView);
 
         imageGridAdapter = new ImageGridAdapter(this);
         gridView.setAdapter(imageGridAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((ImageGridAdapter) gridView.getAdapter()).onItemClick(view, position);
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
-                (new Runnable() {
+                Runnable loadPhotos = (new Runnable() {
                     @Override
                     public void run() {
                         String username = textField.getText().toString();
                         Context context = view.getContext();
 
                         if (username.isEmpty()) {
-                            Toast.makeText(context, "Invalid - Empty name", Toast.LENGTH_SHORT).show();
+                            makeToast("Invalid - Empty name", context);
                             return;
                         } else if (username.contains(" ")) {
                             username = username.replaceAll("\\s", ""); //replacing all spaces in the string
@@ -70,15 +76,15 @@ public class UserFinder extends ActionBarActivity {
                         try {
                             title = UtilityMethods.getPageTitle(INSTAGRAM_URL_PREFIX + username + "/");
                         } catch (IOException e) {
-                            Toast.makeText(context, "Instagram cannot be reached", Toast.LENGTH_SHORT).show();
+                            makeToast("Instagram cannot be reached", context);
                             return;
                         }
 
                         //TODO find better way to check if user exists
                         if (!title.contains("Page Not Found")) {
-                            Toast.makeText(context, "Valid user", Toast.LENGTH_SHORT).show();
+                            makeToast("Valid user", context);
                         } else {
-                            Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show();
+                            makeToast("Invalid User", context);
                             return;
                         }
 
@@ -86,7 +92,7 @@ public class UserFinder extends ActionBarActivity {
                         try {
                             urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username, 20);
                         } catch (IOException e) {
-                            Toast.makeText(context, "Unable to Load Instagram", Toast.LENGTH_SHORT).show();
+                            makeToast("Unable to load Instagram", context);
                             e.printStackTrace();
                             return;
                         }
@@ -94,12 +100,23 @@ public class UserFinder extends ActionBarActivity {
                         imageGridAdapter.setUrls(urls);
 
                     }
-                }).run();
+                });
+
+                new Thread(loadPhotos).start();
             }
         });
 
     }
 
+
+    public void makeToast(final String messsage, final Context context){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, messsage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
