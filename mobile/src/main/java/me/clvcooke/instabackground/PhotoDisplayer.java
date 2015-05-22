@@ -1,5 +1,6 @@
 package me.clvcooke.instabackground;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by Michael on 15/05/2015.
  */
-public class PhotoDisplayer extends ActionBarActivity {
+public class PhotoDisplayer extends Activity {
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class PhotoDisplayer extends ActionBarActivity {
         List<String> list = new ArrayList<>();
         list.add("drawable://" + R.drawable.instabottom);
 
-        imageGridAdapter.setUrls(list);
+        imageGridAdapter.setUrls(list, "");
     };
 
 

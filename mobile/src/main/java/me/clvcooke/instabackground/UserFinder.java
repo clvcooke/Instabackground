@@ -1,12 +1,11 @@
 package me.clvcooke.instabackground;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +16,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserFinder extends ActionBarActivity {
+public class UserFinder extends Activity {
 
     private EditText usernameTextView;
     private final String INSTAGRAM_URL_PREFIX = "https://instagram.com/";
     private ImageGridAdapter imageGridAdapter;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,7 +37,10 @@ public class UserFinder extends ActionBarActivity {
         setContentView(R.layout.search_page);
 
 
-        Button button = (Button) findViewById(R.id.search_button);
+        Button searchButton = (Button) findViewById(R.id.search_button);
+        Button saveButton = (Button) findViewById(R.id.save_button);
+        Button setButton = (Button) findViewById(R.id.background_button);
+
         final EditText textField = (EditText) findViewById(R.id.username);
         final GridView gridView = (GridView) findViewById(R.id.gridView);
 
@@ -54,7 +54,22 @@ public class UserFinder extends ActionBarActivity {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageGridAdapter.saveSelected();
+            }
+        });
+
+        setButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageGridAdapter.saveSelected();
+                //save photos and transition to background settings page
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -96,9 +111,7 @@ public class UserFinder extends ActionBarActivity {
                             e.printStackTrace();
                             return;
                         }
-
-                        imageGridAdapter.setUrls(urls);
-
+                        imageGridAdapter.setUrls(urls, username);
                     }
                 });
 

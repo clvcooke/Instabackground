@@ -1,5 +1,6 @@
 package me.clvcooke.instabackground;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 /**
  * Created by Colin on 2015-05-13.
  */
-public class ControlPage extends ActionBarActivity {
+public class ControlPage extends Activity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
