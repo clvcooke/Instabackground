@@ -43,7 +43,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return null;
+        return itemList.get(groupPosition).getChildItemList().get(childPosition);
     }
 
     @Override

@@ -2,12 +2,12 @@ package me.clvcooke.instabackground;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.DownloadListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +83,13 @@ public class ImageGridAdapter extends BaseAdapter {
         isToggled.set(position, overlay.getVisibility() == View.VISIBLE);
     }
 
+    public void onItemLongClick(int position){
+
+        Intent intent = new Intent(mContext, FullScreenPhotoActivity.class);
+        intent.putExtra("url", mUrls.get(position));
+        mContext.startActivity(intent);
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView image;
@@ -92,7 +98,7 @@ public class ImageGridAdapter extends BaseAdapter {
             layout = (FrameLayout) mInflator.inflate(R.layout.image_view_overlay, null);
             image = (ImageView) layout.findViewById(R.id.image);
             image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            image.setPadding(2, 2, 2, 2);
+            image.setPadding(3, 3, 3, 3);
         } else {
             layout = (FrameLayout) convertView;
             image = (ImageView) layout.findViewById(R.id.image);
@@ -107,15 +113,14 @@ public class ImageGridAdapter extends BaseAdapter {
     public void saveSelected() {
 
         String date = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
-        String directory = "/instabackground/"  + user;
+        String directory = UtilityMethods.DIRECTORY_PREFIX  + user;
+        File direct = new File(Environment.getExternalStorageDirectory() + directory);
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
         for (int i = 0; i < mUrls.size(); i++) {
             if (isToggled.get(i)) {
                 String url = mUrls.get(i);
-                File direct = new File(Environment.getExternalStorageDirectory() + directory);
-
-                if (!direct.exists()) {
-                    direct.mkdirs();
-                }
 
                 DownloadManager mgr = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
                 Uri downloadUri = Uri.parse(url);
@@ -126,8 +131,9 @@ public class ImageGridAdapter extends BaseAdapter {
                         DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
                         .setAllowedOverRoaming(false).setTitle("Instabackground image download")
                         .setDescription("Downloading photos")
-                        .setDestinationInExternalPublicDir(directory, date + Integer.toString(i) + ".jpg");
-
+                                //basic way to add the url to the filename. Making another assumption that the last
+                                //28 characters are unique enough
+                        .setDestinationInExternalPublicDir(directory, url.substring(url.length() - 32));
                 mgr.enqueue(request);
             }
         }

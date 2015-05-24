@@ -6,6 +6,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,39 +29,17 @@ public class UtilityMethods {
     public static final String COUNT_STRING = "ImageCount";
     public static final String IMAGE_DIR = "imageDir";
     public static final String IMAGE_SEARCH_STRING = "standard_resolution";
+    public static final String DIRECTORY_PREFIX = "/instabackground";
 
     public static String getPageTitle(String url) throws IOException{
         Document document = Jsoup.connect(url).timeout(3000).userAgent("Mozilla/17.0").get();
         return document.title();
     }
 
-
-    //for now this just fetches the first x images in the feed
-    public static List<String> getImageURLSFromRSS(String url, int amount) throws IOException{
-
-        List<String> urls = new ArrayList<String>();
-        Document document = Jsoup.connect(url).get();
-        Element channel = document.select("rss").first().select("channel").first();
-
-        int pictureMax = channel.select("item").size();
-        for(int i = 0; i < amount&&i < pictureMax; i++){
-            try{
-                urls.add(channel.select("item").get(i).select("url").first().text());
-            }catch(Exception e){
-                e.printStackTrace();
-                break;
-            }
-        }
-
-        return urls;
-    }
-
-
     public static void setWallpaper(Context context, Bitmap bitmap){
-
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-
         try{
+            //TODO add resized bitmap here (maybe, look it up)
             wallpaperManager.setBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,6 +47,7 @@ public class UtilityMethods {
 
     }
 
+    //TODO add javadocs
     public static List<String> getURLS(String pageURL,int amount) throws IOException {
         List<String> urls = new ArrayList<String>();
         String megaString  = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get().toString();
@@ -79,6 +60,17 @@ public class UtilityMethods {
         return urls;
     }
 
+    //TODO add javadocs
+    public static File[] getSavedURLS(String user){
+        File[] files = null;
+        String searchDirectory = DIRECTORY_PREFIX + user;
+        File direct = new File(Environment.getExternalStorageDirectory() + searchDirectory);
+        if(!direct.exists()){
+            return files;
+        }
+        files = direct.listFiles();
+        return files;
+    }
 
 
 

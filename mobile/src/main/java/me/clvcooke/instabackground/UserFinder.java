@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -51,6 +52,14 @@ public class UserFinder extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((ImageGridAdapter) gridView.getAdapter()).onItemClick(view, position);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ((ImageGridAdapter) gridView.getAdapter()).onItemLongClick(position);
+                return true;
             }
         });
 
@@ -111,7 +120,30 @@ public class UserFinder extends Activity {
                             e.printStackTrace();
                             return;
                         }
+
+
+
                         imageGridAdapter.setUrls(urls, username);
+                        File[] files = UtilityMethods.getSavedURLS(username);
+                        if(files != null){
+                            for(File file : files){
+                                //TODO this will need to be updated when we can get more urls at once
+                                int i = 0;
+                                for(String url : urls){
+                                    if(url.contains(file.getName())){
+                                        urls.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageGridAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 });
 

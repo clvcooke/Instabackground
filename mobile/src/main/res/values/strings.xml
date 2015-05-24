@@ -4,5 +4,6 @@
     <string name="app_name">Instabackground</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="directory_prefix">/instabackground/</string>
 
 </resources>

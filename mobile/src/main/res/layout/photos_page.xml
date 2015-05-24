@@ -3,10 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ExpandableListView
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/expandableListView"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/gridView"
+        android:stretchMode="columnWidth"
+        android:numColumns="3"></GridView>
 </LinearLayout>

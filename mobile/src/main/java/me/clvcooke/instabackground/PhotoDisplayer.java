@@ -21,7 +21,7 @@ public class PhotoDisplayer extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photos_page);
-
+/*
         TextView textView = (TextView) findViewById(R.id.textView);
         GridView photoGrid = (GridView) findViewById(R.id.pictureGrid);
 
@@ -31,7 +31,7 @@ public class PhotoDisplayer extends Activity {
         List<String> list = new ArrayList<>();
         list.add("drawable://" + R.drawable.instabottom);
 
-        imageGridAdapter.setUrls(list, "");
+        imageGridAdapter.setUrls(list, "");*/
     };
 
 
