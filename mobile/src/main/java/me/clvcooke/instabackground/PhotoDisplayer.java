@@ -1,38 +1,51 @@
 package me.clvcooke.instabackground;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.clvcooke.instabackground.Adapters.GalleryGridAdapter;
+
 /**
- * Created by Michael on 15/05/2015.
+ * Created by Colin on 15/05/2015.
  */
 public class PhotoDisplayer extends Activity {
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photos_page);
-/*
-        TextView textView = (TextView) findViewById(R.id.textView);
-        GridView photoGrid = (GridView) findViewById(R.id.pictureGrid);
+        final GridView gridView = (GridView) findViewById(R.id.gridView);
+        GalleryGridAdapter adapter = new GalleryGridAdapter(this);
+        gridView.setAdapter(adapter);
+        List<String> users = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+        File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX);
+        if (files != null) {
+            for (File file : files) {
+                File[] pictures = file.listFiles();
+                if (pictures != null && pictures.length != 0) {
+                    urls.add("file://" + file.listFiles()[0].getPath());
+                    users.add(file.getName());
+                }
+            }
+        }
+        adapter.setUrls(urls, users);
+        adapter.notifyDataSetChanged();
 
-        ImageGridAdapter imageGridAdapter = new ImageGridAdapter(this);
-        photoGrid.setAdapter(imageGridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((GalleryGridAdapter) gridView.getAdapter()).onItemClick(view, position);
+            }
+        });
+    }
 
-        List<String> list = new ArrayList<>();
-        list.add("drawable://" + R.drawable.instabottom);
-
-        imageGridAdapter.setUrls(list, "");*/
-    };
 
 
 }

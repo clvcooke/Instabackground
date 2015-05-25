@@ -29,7 +29,7 @@ public class UtilityMethods {
     public static final String COUNT_STRING = "ImageCount";
     public static final String IMAGE_DIR = "imageDir";
     public static final String IMAGE_SEARCH_STRING = "standard_resolution";
-    public static final String DIRECTORY_PREFIX = "/instabackground";
+    public static final String DIRECTORY_PREFIX = "/instabackground/";
 
     public static String getPageTitle(String url) throws IOException{
         Document document = Jsoup.connect(url).timeout(3000).userAgent("Mozilla/17.0").get();
@@ -61,10 +61,9 @@ public class UtilityMethods {
     }
 
     //TODO add javadocs
-    public static File[] getSavedURLS(String user){
+    public static File[] getSavedFiles(String relativePath){
         File[] files = null;
-        String searchDirectory = DIRECTORY_PREFIX + user;
-        File direct = new File(Environment.getExternalStorageDirectory() + searchDirectory);
+        File direct = new File(Environment.getExternalStorageDirectory() + relativePath);
         if(!direct.exists()){
             return files;
         }

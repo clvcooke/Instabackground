@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
 
 
 public class UserFinder extends Activity {
@@ -122,15 +122,14 @@ public class UserFinder extends Activity {
                         }
 
 
-
                         imageGridAdapter.setUrls(urls, username);
-                        File[] files = UtilityMethods.getSavedURLS(username);
-                        if(files != null){
-                            for(File file : files){
+                        File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX + username);
+                        if (files != null) {
+                            for (File file : files) {
                                 //TODO this will need to be updated when we can get more urls at once
                                 int i = 0;
-                                for(String url : urls){
-                                    if(url.contains(file.getName())){
+                                for (String url : urls) {
+                                    if (url.contains(file.getName())) {
                                         urls.remove(i);
                                         break;
                                     }
@@ -154,7 +153,7 @@ public class UserFinder extends Activity {
     }
 
 
-    public void makeToast(final String messsage, final Context context){
+    public void makeToast(final String messsage, final Context context) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

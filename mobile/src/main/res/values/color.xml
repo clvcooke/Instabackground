@@ -7,5 +7,6 @@
     <color name="background">#FAEECF</color>
     <color name="backgroundDownstate">#5e5b4f4c</color>
     <color name="backgroundText">#676D7D</color>
+    <color name="textBackground">#bd000000</color>
 
 </resources>

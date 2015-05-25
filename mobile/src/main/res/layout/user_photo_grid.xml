@@ -3,10 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textView"
+        android:gravity="center" />
+
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/gridView"
+        android:columnCount="3"
         android:stretchMode="columnWidth"
-        android:numColumns="2"></GridView>
+        android:id="@+id/userGridView"/>
 </LinearLayout>
