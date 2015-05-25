@@ -40,7 +40,6 @@ public class UserFinder extends Activity {
 
         Button searchButton = (Button) findViewById(R.id.search_button);
         Button saveButton = (Button) findViewById(R.id.save_button);
-        Button setButton = (Button) findViewById(R.id.background_button);
 
         final EditText textField = (EditText) findViewById(R.id.username);
         final GridView gridView = (GridView) findViewById(R.id.gridView);
@@ -67,14 +66,6 @@ public class UserFinder extends Activity {
             @Override
             public void onClick(View v) {
                 imageGridAdapter.saveSelected();
-            }
-        });
-
-        setButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageGridAdapter.saveSelected();
-                //save photos and transition to background settings page
             }
         });
 

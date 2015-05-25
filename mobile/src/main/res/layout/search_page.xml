@@ -70,12 +70,7 @@
             android:text="Save Photos"
             android:id="@+id/save_button" />
 
-        <Button
-            android:layout_weight="0.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Set Background"
-            android:id="@+id/background_button" />
+
     </LinearLayout>
 
 </LinearLayout>
