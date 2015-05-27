@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
+import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 
 public class UserFinder extends Activity {

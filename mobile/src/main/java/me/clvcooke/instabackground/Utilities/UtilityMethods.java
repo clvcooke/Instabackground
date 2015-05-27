@@ -1,4 +1,4 @@
-package me.clvcooke.instabackground;
+package me.clvcooke.instabackground.Utilities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -69,6 +69,12 @@ public class UtilityMethods {
         }
         files = direct.listFiles();
         return files;
+    }
+
+    public static void saveFiles(List<String> urls){
+        for(String url: urls){
+
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package me.clvcooke.instabackground;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
+import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 /**
  * Created by Colin on 2015-05-24.
  */
 public class UserPhotoGrid extends Activity {
+
+    ImageGridAdapter imageGridAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,9 @@ public class UserPhotoGrid extends Activity {
         setContentView(R.layout.user_photo_grid);
 
 
-        String username = getIntent().getExtras().getString("user");
+        Bundle extras = getIntent().getExtras();
+        String username = extras.getString("user");
+        ArrayList<String> selectedURLS = extras.getStringArrayList("selected");
 
         GridView gridView = (GridView) findViewById(R.id.userGridView);
         gridView.setNumColumns(3);
@@ -32,7 +38,7 @@ public class UserPhotoGrid extends Activity {
 
         ((TextView) findViewById(R.id.textView)).setText(username);
 
-        final ImageGridAdapter imageGridAdapter = new ImageGridAdapter(this);
+        imageGridAdapter = new ImageGridAdapter(this);
 
         File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX + username);
         List<String> urls = new ArrayList<>();
@@ -40,9 +46,7 @@ public class UserPhotoGrid extends Activity {
             urls.add("file://" + file.getPath());
         }
         gridView.setAdapter(imageGridAdapter);
-        //TODO use overloaded function
-        imageGridAdapter.setUrls(urls, username);
-
+        imageGridAdapter.setUrls(urls, username, selectedURLS);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -58,4 +62,14 @@ public class UserPhotoGrid extends Activity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("urls", imageGridAdapter.getSelected());
+        setResult(RESULT_OK, returnIntent);
+        finish();
+        super.onBackPressed();
+    }
+
 }

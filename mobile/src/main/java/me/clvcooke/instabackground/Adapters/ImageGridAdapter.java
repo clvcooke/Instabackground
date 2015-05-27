@@ -16,14 +16,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import me.clvcooke.instabackground.FullScreenPhotoActivity;
 import me.clvcooke.instabackground.R;
-import me.clvcooke.instabackground.UtilityMethods;
+import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 /**
  * Created by Colin on 2015-05-14.
@@ -57,6 +55,19 @@ public class ImageGridAdapter extends BaseAdapter {
             isToggled.add(false);
         }
         user = username;
+    }
+
+    public void setUrls(List<String> urls, String username, List<String> selectedUrls){
+        if(selectedUrls != null){
+            mUrls = urls;
+            isToggled = new ArrayList<>();
+            user = username;
+            for(String url : mUrls){
+                isToggled.add(selectedUrls.contains(url));
+            }
+        }else{
+            setUrls(urls, username);
+        }
     }
 
     @Override
@@ -115,8 +126,6 @@ public class ImageGridAdapter extends BaseAdapter {
     }
 
     public void saveSelected() {
-
-        String date = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
         String directory = UtilityMethods.DIRECTORY_PREFIX  + user;
         File direct = new File(Environment.getExternalStorageDirectory() + directory);
         if (!direct.exists()) {
@@ -142,5 +151,15 @@ public class ImageGridAdapter extends BaseAdapter {
             }
         }
 
+    }
+
+    public ArrayList<String> getSelected(){
+        ArrayList<String> selected = new ArrayList<>();
+        for(int i = 0; i < mUrls.size(); i++){
+            if(isToggled.get(i)){
+                selected.add(mUrls.get(i));
+            }
+        }
+        return selected;
     }
 }

@@ -1,10 +1,7 @@
 package me.clvcooke.instabackground.Adapters;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +13,11 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import me.clvcooke.instabackground.FullScreenPhotoActivity;
 import me.clvcooke.instabackground.R;
 import me.clvcooke.instabackground.UserPhotoGrid;
-import me.clvcooke.instabackground.UtilityMethods;
 
 /**
  * Created by Colin on 2015-05-24.
@@ -83,10 +75,8 @@ public class GalleryGridAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(mContext, UserPhotoGrid.class);
-        intent.putExtra("user",users.get(position));
-        mContext.startActivity(intent);
+    public String getUser(int position){
+        return users.get(position);
     }
 
     public void onItemLongClick(int position){
