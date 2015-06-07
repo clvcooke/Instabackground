@@ -104,7 +104,7 @@ public class UserFinder extends Activity {
                             return;
                         }
 
-                        List<String> urls;
+                        ArrayList<String> urls;
                         try {
                             urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username, 20);
                         } catch (IOException e) {

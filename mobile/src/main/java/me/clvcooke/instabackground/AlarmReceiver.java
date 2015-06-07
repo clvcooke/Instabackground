@@ -10,10 +10,16 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.SystemClock;
+import android.util.Log;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.util.List;
 import java.util.Random;
 
+import me.clvcooke.instabackground.Constants.Strings;
+import me.clvcooke.instabackground.Utilities.TinyDB;
 import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 /**
@@ -23,35 +29,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private PendingIntent alarmIntent;
 
-    public void setAlarm(int timeInSeconds, Context context, int count){
+    public void setAlarm(int timeInSeconds, Context context){
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        //Define intent
         Intent intent = new Intent(context, AlarmReceiver.class);
-       // intent.putExtra(UtilityMethods.COUNT_STRING, count);
-
-
         alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
-
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences(UtilityMethods.COUNT_STRING, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putInt(UtilityMethods.COUNT_STRING, count);
-
-        //TODO
-        int i = 0;
-        i++;
-
-        editor.commit();
-
-
-        //TODO change ELAPSED_REALTIME_WAKEUP
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),timeInSeconds * 1000, alarmIntent);
-
-
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),timeInSeconds*1000, alarmIntent);
     }
 
 
@@ -59,30 +42,25 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 
+        TinyDB tinyDB = new TinyDB(context);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(UtilityMethods.COUNT_STRING, Context.MODE_PRIVATE);
-        int amount = sharedPreferences.getInt(UtilityMethods.COUNT_STRING,1);
-
-      //  Toast.makeText(context,Integer.toString(amount), Toast.LENGTH_SHORT).show();
-        //just for now do a random picture out of the amount stored
-        //TODO not that
+        List<String> files = tinyDB.getListString(Strings.FILES_SHARED_PREF);
+        int seconds = tinyDB.getInt(Strings.SECONDS_SHARED_PREF, 14400);
 
 
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(amount + 1);
+        Log.d("INSTA","changing photo");
 
+        if(files != null) {
+            while(files.remove("?"));
 
-        ContextWrapper contextWrapper = new ContextWrapper(context);
+            Random rand = new Random();
+            String file = files.get(rand.nextInt(files.size())).substring(7);
+            String currentFile = tinyDB.getString(Strings.CURRENT_BACKGROUND_IMAGE_URL);
 
-
-        File directory = contextWrapper.getDir(UtilityMethods.IMAGE_DIR, Context.MODE_PRIVATE);
-
-        File path = new File(directory, UtilityMethods.IMAGE_FILE_NAME_PREFIX + Integer.toString(randomNumber+1));
-
-
-        if(path.exists()){
-            Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
-            UtilityMethods.setWallpaper(context, bitmap);
+            if(currentFile != file){
+                tinyDB.putString(Strings.CURRENT_BACKGROUND_IMAGE_URL,file);
+                UtilityMethods.setWallpaper(context, BitmapFactory.decodeFile(file));
+            }
         }
     }
 }

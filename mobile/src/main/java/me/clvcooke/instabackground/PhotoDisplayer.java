@@ -60,6 +60,8 @@ public class PhotoDisplayer extends Activity {
                 String username = ((GalleryGridAdapter) gridView.getAdapter()).getUser(position);
                 Intent intent = new Intent(context, UserPhotoGrid.class);
                 intent.putExtra("user", username);
+
+                //TODO to unselected
                 if(!setButton.getText().equals("Set Background")){
                     intent.putStringArrayListExtra("selected", backgroundURLS);
                 }
@@ -77,12 +79,13 @@ public class PhotoDisplayer extends Activity {
                     actionBar.setBackgroundDrawable(backgroundColor);
                     actionBar.setTitle("Select Photos");
                     button.setText("Save Selection");
-                    TinyDB tinyDB = new TinyDB(context);
-                    tinyDB.putListString("files", backgroundURLS);
                 } else {
                     actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.primary_dark_material_dark));
                     actionBar.setTitle(getResources().getString(R.string.app_name));
                     button.setText("Set Background");
+                    Intent intent = new Intent(context, BackgroundSetter.class);
+                    intent.putStringArrayListExtra("urls", backgroundURLS);
+                    startActivity(intent);
                     //Go to background selector mode
                 }
             }

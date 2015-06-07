@@ -5,4 +5,8 @@ package me.clvcooke.instabackground.Constants;
  */
 public class Strings {
 
+    public static String SECONDS_SHARED_PREF = "seconds-shared-pref";
+    public static String FILES_SHARED_PREF = "files-shared-pref";
+    public static String CURRENT_BACKGROUND_IMAGE_URL = "current-background-url";
+
 }

@@ -29,7 +29,7 @@ import me.clvcooke.instabackground.Utilities.UtilityMethods;
 public class ImageGridAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<String> mUrls;
+    private ArrayList<String> mUrls;
     private DisplayImageOptions options;
     private LayoutInflater mInflator;
     private List<Boolean> isToggled;
@@ -48,7 +48,7 @@ public class ImageGridAdapter extends BaseAdapter {
 
     }
 
-    public void setUrls(List<String> urls, String username) {
+    public void setUrls(ArrayList<String> urls, String username) {
         mUrls = urls;
         isToggled = new ArrayList<>();
         for (int i = 0; i < mUrls.size(); i++) {
@@ -57,7 +57,7 @@ public class ImageGridAdapter extends BaseAdapter {
         user = username;
     }
 
-    public void setUrls(List<String> urls, String username, List<String> selectedUrls){
+    public void setUrls(ArrayList<String> urls, String username, List<String> selectedUrls){
         if(selectedUrls != null){
             mUrls = urls;
             isToggled = new ArrayList<>();
@@ -161,5 +161,18 @@ public class ImageGridAdapter extends BaseAdapter {
             }
         }
         return selected;
+    }
+
+    public void removeSelected(){
+        for(int i = isToggled.size() -1; i >= 0; i--){
+            if(isToggled.get(i)){
+                mUrls.remove(i);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getUrls(){
+        return mUrls;
     }
 }

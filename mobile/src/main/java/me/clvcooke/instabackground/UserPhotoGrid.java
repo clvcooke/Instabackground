@@ -41,7 +41,7 @@ public class UserPhotoGrid extends Activity {
         imageGridAdapter = new ImageGridAdapter(this);
 
         File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX + username);
-        List<String> urls = new ArrayList<>();
+        ArrayList<String> urls = new ArrayList<>();
         for (File file : files) {
             urls.add("file://" + file.getPath());
         }

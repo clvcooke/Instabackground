@@ -48,8 +48,8 @@ public class UtilityMethods {
     }
 
     //TODO add javadocs
-    public static List<String> getURLS(String pageURL,int amount) throws IOException {
-        List<String> urls = new ArrayList<String>();
+    public static ArrayList<String> getURLS(String pageURL,int amount) throws IOException {
+        ArrayList<String> urls = new ArrayList<String>();
         String megaString  = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get().toString();
         int prev = 0;
         //TODO this depends heavily on instagrams page format, lets just hope it doesn't break
@@ -69,6 +69,10 @@ public class UtilityMethods {
         }
         files = direct.listFiles();
         return files;
+    }
+
+    public static File getSavedFile(String filePath){
+        return new File(Environment.getExternalStorageDirectory() + filePath);
     }
 
     public static void saveFiles(List<String> urls){
