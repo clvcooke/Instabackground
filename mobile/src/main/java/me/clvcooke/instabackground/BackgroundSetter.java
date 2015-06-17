@@ -3,12 +3,14 @@ package me.clvcooke.instabackground;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,8 +31,10 @@ public class BackgroundSetter extends Activity {
         ArrayList<String> urls = getIntent().getExtras().getStringArrayList("urls");
         setContentView(R.layout.background_setter);
         final Button removeButton = (Button) findViewById(R.id.removePhotos);
-        Button backgroundButton = (Button) findViewById(R.id.setterButton);
+        final Button backgroundButton = (Button) findViewById(R.id.setterButton);
+        backgroundButton.setEnabled(false);
         final EditText numberText = (EditText) findViewById(R.id.time);
+
         GridView gridView = (GridView) findViewById(R.id.backgroundPhotos);
         final Context context = this;
 
@@ -49,7 +53,6 @@ public class BackgroundSetter extends Activity {
         gridView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 imageGridAdapter.onItemClick(view, position);
                 removeButton.setEnabled(imageGridAdapter.getSelected().size() > 0);
             }
@@ -60,18 +63,12 @@ public class BackgroundSetter extends Activity {
         backgroundButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberText.getText() != null)
-                {
-                    TinyDB tinyDB = new TinyDB(context);
-                    tinyDB.putListString(Strings.FILES_SHARED_PREF, imageGridAdapter.getUrls());
-                    AlarmReceiver alarmReceiver = new AlarmReceiver();
-
-                    int seconds = (int) (Double.parseDouble(numberText.getText().toString()) * 3600);
-                    tinyDB.putInt(Strings.SECONDS_SHARED_PREF, seconds);
-                    alarmReceiver.setAlarm(seconds, context);
-                } else {
-                    Toast.makeText(context, "Enter an hour amount", Toast.LENGTH_SHORT);
-                }
+                TinyDB tinyDB = new TinyDB(context);
+                tinyDB.putListString(Strings.FILES_SHARED_PREF, imageGridAdapter.getUrls());
+                AlarmReceiver alarmReceiver = new AlarmReceiver();
+                int seconds = (int) (Double.parseDouble(numberText.getText().toString()) * 3600);
+                tinyDB.putInt(Strings.SECONDS_SHARED_PREF, seconds);
+                alarmReceiver.setAlarm(seconds, context);
             }
         });
 
@@ -82,6 +79,20 @@ public class BackgroundSetter extends Activity {
                 imageGridAdapter.removeSelected();
             }
         });
+
+        numberText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (numberText.getText() == null || numberText.getText().length() == 0) {
+                    backgroundButton.setEnabled(false);
+                } else {
+                    backgroundButton.setEnabled(true);
+                }
+                return false;
+            }
+        });
+
+
 
 
     }

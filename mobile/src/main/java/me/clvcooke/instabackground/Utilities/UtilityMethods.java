@@ -1,19 +1,12 @@
 package me.clvcooke.instabackground.Utilities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +21,7 @@ public class UtilityMethods {
     public static final String IMAGE_FILE_NAME_PREFIX = "instagram-photo-";
     public static final String COUNT_STRING = "ImageCount";
     public static final String IMAGE_DIR = "imageDir";
-    public static final String IMAGE_SEARCH_STRING = "standard_resolution";
+    public static final String IMAGE_SEARCH_STRING = "display_src";
     public static final String DIRECTORY_PREFIX = "/instabackground/";
 
     public static String getPageTitle(String url) throws IOException{
@@ -52,10 +45,12 @@ public class UtilityMethods {
         ArrayList<String> urls = new ArrayList<String>();
         String megaString  = Jsoup.connect(pageURL).timeout(3000).userAgent("Mozilla/17.0").get().toString();
         int prev = 0;
-        //TODO this depends heavily on instagrams page format, lets just hope it doesn't break
+        prev = megaString.indexOf("nodes\":[{\"");
+
+        //TODO this depends heavily on instagrams page format, lets just hope it doesn't break. Fuck it broke
         for(int i = 0; i < amount; i++){
-            prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length() + 10;
-            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -1).replace(String.valueOf('\\'), ""));
+            prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length()+3;
+            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -2).replace(String.valueOf('\\'), ""));
         }
         return urls;
     }

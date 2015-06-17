@@ -45,8 +45,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         TinyDB tinyDB = new TinyDB(context);
 
         List<String> files = tinyDB.getListString(Strings.FILES_SHARED_PREF);
-        int seconds = tinyDB.getInt(Strings.SECONDS_SHARED_PREF, 14400);
-
 
         Log.d("INSTA","changing photo");
 

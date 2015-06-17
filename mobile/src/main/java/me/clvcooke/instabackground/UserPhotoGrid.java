@@ -2,6 +2,7 @@ package me.clvcooke.instabackground;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,16 +22,21 @@ import me.clvcooke.instabackground.Utilities.UtilityMethods;
 public class UserPhotoGrid extends Activity {
 
     ImageGridAdapter imageGridAdapter;
+    ArrayList<String> selectedURLS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_photo_grid);
 
-
         Bundle extras = getIntent().getExtras();
         String username = extras.getString("user");
-        ArrayList<String> selectedURLS = extras.getStringArrayList("selected");
+        selectedURLS = extras.getStringArrayList("selected");
+
+        if(selectedURLS != null){
+            getActionBar().setBackgroundDrawable(new ColorDrawable((getResources().getColor(R.color.actionBarSet))));
+            getActionBar().setTitle("Select Photos");
+        }
 
         GridView gridView = (GridView) findViewById(R.id.userGridView);
         gridView.setNumColumns(3);
@@ -67,6 +73,9 @@ public class UserPhotoGrid extends Activity {
     public void onBackPressed(){
         Intent returnIntent = new Intent();
         returnIntent.putExtra("urls", imageGridAdapter.getSelected());
+        if(selectedURLS != null){
+            returnIntent.putExtra("removed", selectedURLS.removeAll(imageGridAdapter.getSelected()));
+        }
         setResult(RESULT_OK, returnIntent);
         finish();
         super.onBackPressed();

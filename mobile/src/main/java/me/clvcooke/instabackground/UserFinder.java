@@ -106,7 +106,7 @@ public class UserFinder extends Activity {
 
                         ArrayList<String> urls;
                         try {
-                            urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username, 20);
+                            urls = UtilityMethods.getURLS(INSTAGRAM_URL_PREFIX + username, 23);
                         } catch (IOException e) {
                             makeToast("Unable to load Instagram", context);
                             e.printStackTrace();

@@ -1,7 +1,6 @@
 package me.clvcooke.instabackground.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.clvcooke.instabackground.R;
-import me.clvcooke.instabackground.UserPhotoGrid;
 
 /**
  * Created by Colin on 2015-05-24.
