@@ -32,6 +32,11 @@
         <activity android:name=".UserPhotoGrid"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
+
+        <activity android:name=".Settings"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
         <activity android:name=".BackgroundSetter"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
@@ -53,7 +58,12 @@
 
 
 
-        <receiver android:name="me.clvcooke.instabackground.AlarmReceiver"></receiver>
+        <receiver android:name="me.clvcooke.instabackground.BootReceiver">
+            <intent-filter>
+                <action android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED"/>
+            </intent-filter>
+
+        </receiver>
 
         <meta-data
             android:name="com.google.android.gms.version"

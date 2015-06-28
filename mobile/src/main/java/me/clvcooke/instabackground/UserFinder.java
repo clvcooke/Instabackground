@@ -3,6 +3,7 @@ package me.clvcooke.instabackground;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,7 +29,6 @@ import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 public class UserFinder extends Activity {
 
-    private EditText usernameTextView;
     private final String INSTAGRAM_URL_PREFIX = "https://instagram.com/";
     private ImageGridAdapter imageGridAdapter;
 
@@ -168,8 +168,8 @@ public class UserFinder extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
             return true;
         }
 

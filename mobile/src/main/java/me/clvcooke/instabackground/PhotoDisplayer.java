@@ -4,11 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,7 +20,6 @@ import java.util.List;
 
 import me.clvcooke.instabackground.Adapters.GalleryGridAdapter;
 import me.clvcooke.instabackground.Constants.Integers;
-import me.clvcooke.instabackground.Utilities.TinyDB;
 import me.clvcooke.instabackground.Utilities.UtilityMethods;
 
 /**
@@ -28,8 +27,9 @@ import me.clvcooke.instabackground.Utilities.UtilityMethods;
  */
 public class PhotoDisplayer extends Activity {
 
-    private ArrayList<String> backgroundURLS = new ArrayList<>();
+    private ArrayList<String> selectedURLS = new ArrayList<>();
     private Button setButton;
+    private Menu mMenu;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +64,7 @@ public class PhotoDisplayer extends Activity {
                 String username = ((GalleryGridAdapter) gridView.getAdapter()).getUser(position);
                 Intent intent = new Intent(context, UserPhotoGrid.class);
                 intent.putExtra("user", username);
-                //TODO to unselected
-                if (!setButton.getText().equals("Set Background")) {
-                    intent.putStringArrayListExtra("selected", backgroundURLS);
-                }
+                intent.putStringArrayListExtra("selected", selectedURLS);
                 startActivityForResult(intent, Integers.PICK_PHOTO_REQUEST);
             }
         });
@@ -75,24 +72,11 @@ public class PhotoDisplayer extends Activity {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button button = (Button) v;
-                ActionBar actionBar = getActionBar();
-                String text = button.getText().toString();
-                if (text.equals("Set Background")) {
-                    actionBar.setBackgroundDrawable(backgroundColor);
-                    actionBar.setTitle("Select Photos");
-                    button.setText("Save Selection");
-                    button.setEnabled(false);
-                } else {
-                    actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.primary_dark_material_dark));
-                    actionBar.setTitle(getResources().getString(R.string.app_name));
-                    button.setText("Set Background");
-                    if (!backgroundURLS.isEmpty()) {
-                        Intent intent = new Intent(context, BackgroundSetter.class);
-                        intent.putStringArrayListExtra("urls", backgroundURLS);
-                        startActivity(intent);
-                    }      //Go to background selector mode
-                }
+                Intent intent = new Intent(context, BackgroundSetter.class);
+                intent.putStringArrayListExtra("urls", selectedURLS);
+                disableSelectingMode();
+                startActivity(intent);
+
             }
         });
     }
@@ -102,20 +86,13 @@ public class PhotoDisplayer extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Integers.PICK_PHOTO_REQUEST) {
             if (resultCode == RESULT_OK) {
-                List<String> urls = data.getExtras().getStringArrayList("urls");
-                List<String> removed = data.getExtras().getStringArrayList("removed");
-                if(removed != null){
-                    backgroundURLS.removeAll(removed);
-                }
-                backgroundURLS.removeAll(urls);
-                backgroundURLS.addAll(urls);
+                selectedURLS = data.getExtras().getStringArrayList("urls");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(!setButton.getText().toString().toLowerCase().equals("set background"))
-                        {
-                            setButton.setEnabled(!backgroundURLS.isEmpty());
-                        }
+                        setButton.setEnabled(!selectedURLS.isEmpty());
+                        mMenu.getItem(0).setVisible(!selectedURLS.isEmpty());
+                        getActionBar().setBackgroundDrawable(!selectedURLS.isEmpty() ? new ColorDrawable((getResources().getColor(R.color.actionBarSet))) : getResources().getDrawable(R.color.primary_dark_material_dark));
                     }
                 });
             }
@@ -126,7 +103,26 @@ public class PhotoDisplayer extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_picker, menu);
+        mMenu = menu;
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.cancel:
+                selectedURLS = new ArrayList<String>();
+                disableSelectingMode();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void disableSelectingMode(){
+
+        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.primary_dark_material_dark));
+        setButton.setEnabled(false);
+        selectedURLS = null;
     }
 }
 

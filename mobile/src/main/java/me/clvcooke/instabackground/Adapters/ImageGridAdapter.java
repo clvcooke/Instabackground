@@ -91,11 +91,12 @@ public class ImageGridAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void onItemClick(View view, int position) {
+    public String onItemClick(View view, int position) {
         boolean visible = isToggled.get(position);
         ImageView overlay = (ImageView) view.findViewById(R.id.overlay);
         overlay.setVisibility(visible ? View.INVISIBLE : View.VISIBLE);
         isToggled.set(position, overlay.getVisibility() == View.VISIBLE);
+        return mUrls.get(position);
     }
 
     public void onItemLongClick(int position){
@@ -134,6 +135,8 @@ public class ImageGridAdapter extends BaseAdapter {
         for (int i = 0; i < mUrls.size(); i++) {
             if (isToggled.get(i)) {
                 String url = mUrls.get(i);
+                mUrls.remove(i);
+                i--;
 
                 DownloadManager mgr = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
                 Uri downloadUri = Uri.parse(url);
@@ -151,6 +154,8 @@ public class ImageGridAdapter extends BaseAdapter {
             }
         }
 
+        notifyDataSetChanged();
+
     }
 
     public ArrayList<String> getSelected(){
@@ -167,6 +172,14 @@ public class ImageGridAdapter extends BaseAdapter {
         for(int i = isToggled.size() -1; i >= 0; i--){
             if(isToggled.get(i)){
                 mUrls.remove(i);
+            }
+        }
+        notifyDataSetChanged();
+    }
+    public void deselectAll(){
+        for(int i = 0; i < isToggled.size(); i++){
+            if(isToggled.get(i)){
+                isToggled.set(i, false);
             }
         }
         notifyDataSetChanged();

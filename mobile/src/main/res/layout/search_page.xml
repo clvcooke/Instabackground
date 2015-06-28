@@ -15,6 +15,7 @@
         <EditText
             android:layout_margin="8dp"
             android:id="@+id/username"
+            android:hint="username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
