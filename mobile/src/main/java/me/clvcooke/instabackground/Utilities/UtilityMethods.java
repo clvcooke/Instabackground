@@ -51,7 +51,13 @@ public class UtilityMethods {
         for(int i = 0; i < amount; i++){
             prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length()+3;
             urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -2).replace(String.valueOf('\\'), ""));
+            if(urls.get(i).endsWith("jp")){
+                urls.set(i,urls.get(i).concat("g"));
+            }else if(urls.get(i).endsWith("j")){
+                urls.set(i,urls.get(i).concat("pg"));
+            }
         }
+
         return urls;
     }
 

@@ -41,9 +41,8 @@ public class UserPhotoGrid extends Activity {
         context = this;
         setButton = (Button) findViewById(R.id.setButton);
         selectedURLS = extras.getStringArrayList("selected");
-        if (!selectedURLS.isEmpty()) {
-            changeSelectMode(true);
-        }
+
+
 
         GridView gridView = (GridView) findViewById(R.id.userGridView);
         gridView.setNumColumns(3);
@@ -93,6 +92,8 @@ public class UserPhotoGrid extends Activity {
         });
     }
 
+
+
     @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
@@ -115,6 +116,12 @@ public class UserPhotoGrid extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_picker, menu);
         mMenu = menu;
+        if(selectedURLS == null){
+            selectedURLS = new ArrayList<String>();
+        }
+        if (!selectedURLS.isEmpty()) {
+            changeSelectMode(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
