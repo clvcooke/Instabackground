@@ -50,12 +50,43 @@ public class UtilityMethods {
         //TODO this depends heavily on instagrams page format, lets just hope it doesn't break. Fuck it broke
         for(int i = 0; i < amount; i++){
             prev = megaString.indexOf(IMAGE_SEARCH_STRING,prev) + IMAGE_SEARCH_STRING.length()+3;
-            urls.add(megaString.substring(prev, megaString.indexOf(",",prev) -2).replace(String.valueOf('\\'), ""));
-            if(urls.get(i).endsWith("jp")){
-                urls.set(i,urls.get(i).concat("g"));
-            }else if(urls.get(i).endsWith("j")){
-                urls.set(i,urls.get(i).concat("pg"));
+            int next = megaString.indexOf(",",prev) -2;
+
+            String url;
+            if(prev > 0 && next >prev){
+                url = megaString.substring(prev, next).replace(String.valueOf('\\'), "");
+            }else{
+                return urls;
             }
+
+            //This is a fuzzy scraper, its too much effort to fine tune to get exact URLs so there
+            //is a bit of self correction
+
+
+            boolean add = true;
+            //first lets check if it ends with the right extension
+            if(url.endsWith("jp")){
+                url = url.concat("g");
+            }else if(url.endsWith("j")){
+                url = url.concat("pg");
+            }else if(url.endsWith(".")){
+                url = url.concat("jpg");
+            }else if(!url.endsWith(".jpg")){
+                //so it doesn't have the right extension, last guess is that
+                //it has some gunk at the end, get rid of that
+                if(url.contains(".jpg")){
+                    int end = url.indexOf(".jpg") + 4;
+                    url = url.substring(0, end);
+                }else{
+                    //this thing is beyond saving
+                    add = false;
+                }
+            }
+
+            if(add && !urls.contains(url)){
+                urls.add(url);
+            }
+
         }
 
         return urls;
