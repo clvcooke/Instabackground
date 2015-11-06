@@ -1,6 +1,8 @@
 package me.clvcooke.instabackground.Adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.DimenRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,22 +26,14 @@ public class GalleryGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<String> mUrls;
     private List<String> users;
-    private DisplayImageOptions options;
     private LayoutInflater mInflator;
     private List<Boolean> isToggled;
-
+    private int width;
 
     public GalleryGridAdapter(Context c) {
         mContext = c;
         mInflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        options = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.noimage)
-                .showImageOnFail(R.drawable.noimage)
-                .showImageOnLoading(R.drawable.noimage)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build();
-
-
+        width = Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     public void setUrls(List<String> urls, List<String> usernames) {
@@ -97,7 +90,7 @@ public class GalleryGridAdapter extends BaseAdapter {
         }
         ((TextView)layout.findViewById(R.id.text)).setText(users.get(position));
         image.setAdjustViewBounds(true);
-        ImageLoader.getInstance().displayImage((String) getItem(position), image, options);
+        Picasso.with(mContext).load(mUrls.get(position)).resize(width,width).into(image);
         return layout;
     }
 

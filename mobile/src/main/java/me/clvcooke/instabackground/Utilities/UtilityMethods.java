@@ -3,6 +3,7 @@ package me.clvcooke.instabackground.Utilities;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 
 import org.jsoup.Jsoup;
@@ -103,15 +104,6 @@ public class UtilityMethods {
         return files;
     }
 
-    public static File getSavedFile(String filePath){
-        return new File(Environment.getExternalStorageDirectory() + filePath);
-    }
-
-    public static void saveFiles(List<String> urls){
-        for(String url: urls){
-
-        }
-    }
 
 
 

@@ -3,6 +3,7 @@ package me.clvcooke.instabackground;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,6 +45,7 @@ public class UserPhotoGrid extends Activity {
 
 
 
+
         GridView gridView = (GridView) findViewById(R.id.userGridView);
         gridView.setNumColumns(3);
         ((TextView) findViewById(R.id.textView)).setText(username);
@@ -56,7 +58,7 @@ public class UserPhotoGrid extends Activity {
             urls.add("file://" + file.getPath());
         }
         gridView.setAdapter(imageGridAdapter);
-        imageGridAdapter.setUrls(urls, username, selectedURLS);
+        imageGridAdapter.loadUrls(urls, username, selectedURLS);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

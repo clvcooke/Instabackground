@@ -78,7 +78,7 @@ public class UserFinder extends Activity {
                     @Override
                     public void run() {
                         String username = textField.getText().toString();
-                        Context context = view.getContext();
+                        final Context context = view.getContext();
 
                         if (username.isEmpty()) {
                             makeToast("Invalid - Empty name", context);
@@ -114,7 +114,7 @@ public class UserFinder extends Activity {
                         }
 
 
-                        imageGridAdapter.setUrls(urls, username);
+                        imageGridAdapter.loadUrls(urls, username);
                         File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX + username);
                         if (files != null) {
                             for (File file : files) {
@@ -133,6 +133,7 @@ public class UserFinder extends Activity {
                             @Override
                             public void run() {
                                 imageGridAdapter.notifyDataSetChanged();
+
                             }
                         });
                     }

@@ -10,8 +10,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public class BackgroundSetter extends Activity {
 
         final ImageGridAdapter imageGridAdapter = new ImageGridAdapter(this);
         gridView.setAdapter(imageGridAdapter);
-        imageGridAdapter.setUrls(urls, "");
+        imageGridAdapter.loadUrls(urls, "");
 
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

@@ -3,6 +3,8 @@ package me.clvcooke.instabackground.Adapters;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -12,8 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,34 +31,36 @@ public class ImageGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<String> mUrls;
-    private DisplayImageOptions options;
     private LayoutInflater mInflator;
     private List<Boolean> isToggled;
     private String user;
+    private int height;
+    private int width;
 
     public ImageGridAdapter(Context c) {
         mContext = c;
         mInflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        options = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.noimage)
-                .showImageOnFail(R.drawable.noimage)
-                .showImageOnLoading(R.drawable.noimage)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build();
 
-
+        width = Resources.getSystem().getDisplayMetrics().widthPixels/3;
     }
 
-    public void setUrls(ArrayList<String> urls, String username) {
+
+    /**
+     *
+     * @param urls
+     * @param username
+     */
+    public void loadUrls(ArrayList<String> urls, String username) {
         mUrls = urls;
         isToggled = new ArrayList<>();
         for (int i = 0; i < mUrls.size(); i++) {
             isToggled.add(false);
         }
         user = username;
+
     }
 
-    public void setUrls(ArrayList<String> urls, String username, List<String> selectedUrls){
+    public void loadUrls(ArrayList<String> urls, String username, List<String> selectedUrls){
         if(selectedUrls != null){
             mUrls = urls;
             isToggled = new ArrayList<>();
@@ -65,8 +68,9 @@ public class ImageGridAdapter extends BaseAdapter {
             for(String url : mUrls){
                 isToggled.add(selectedUrls.contains(url));
             }
+            loadUrls(urls, username);
         }else{
-            setUrls(urls, username);
+            loadUrls(urls, username);
         }
     }
 
@@ -122,7 +126,8 @@ public class ImageGridAdapter extends BaseAdapter {
 
         layout.findViewById(R.id.overlay).setVisibility(isToggled.get(position) ? View.VISIBLE : View.INVISIBLE);
         image.setAdjustViewBounds(true);
-        ImageLoader.getInstance().displayImage((String) getItem(position), image, options);
+
+        Picasso.with(mContext).load(mUrls.get(position)).resize(width, width).into(image);
         return layout;
     }
 
@@ -136,6 +141,7 @@ public class ImageGridAdapter extends BaseAdapter {
             if (isToggled.get(i)) {
                 String url = mUrls.get(i);
                 mUrls.remove(i);
+                isToggled.remove(i);
                 i--;
 
                 DownloadManager mgr = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
