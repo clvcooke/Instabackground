@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -116,15 +117,13 @@ public class UserFinder extends Activity {
                         }
 
 
-
                         //make a hashmap of the last 28 chars of the url
-                        HashMap<String,Integer> urlEndings = new HashMap<>();
+                        HashMap<String, Integer> urlEndings = new HashMap<>();
 
-                        for(int i = 0; i < urls.size(); i++){
+                        for (int i = 0; i < urls.size(); i++) {
                             String url = urls.get(i);
-                            urlEndings.put(url.substring(url.length() - 32),i);
+                            urlEndings.put(url.substring(url.length() - 32), i);
                         }
-
 
 
                         HashSet<Integer> urlsDownloaded = new HashSet<>();
@@ -134,16 +133,16 @@ public class UserFinder extends Activity {
                             for (File file : files) {
                                 String fileName = file.getName();
                                 String substring = fileName.substring(fileName.length() - 32);
-                                if(urlEndings.containsKey(substring)){
+                                if (urlEndings.containsKey(substring)) {
                                     urlsDownloaded.add(urlEndings.get(substring));
                                 }
                             }
                         }
 
-                        imageGridAdapter.loadUrls(urlsDownloaded ,urls, username);
+                        imageGridAdapter.loadUrls(urlsDownloaded, urls, username);
 
 
-                        if(urls.size() == 0){
+                        if (urls.size() == 0) {
                             makeToast("No images found", context);
                         }
                         runOnUiThread(new Runnable() {
@@ -175,8 +174,9 @@ public class UserFinder extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_picker, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
