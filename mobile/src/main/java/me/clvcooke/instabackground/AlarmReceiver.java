@@ -24,47 +24,45 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private PendingIntent alarmIntent;
 
-    public void setAlarm(int timeInSeconds, Context context){
+    public void setAlarm(int timeInSeconds, Context context) {
 
         Intent receiverIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, 123456789, receiverIntent, 0);
 
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), timeInSeconds*1000, sender);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), timeInSeconds * 1000, sender);
     }
 
-    public void cancelAlarm(Context context){
+    public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if(alarmIntent == null){
+        if (alarmIntent == null) {
             Intent intent = new Intent(context, AlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         }
         alarmManager.cancel(alarmIntent);
     }
 
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        try {
 
-        TinyDB tinyDB = new TinyDB(context);
-
-        List<String> files = tinyDB.getListString(Strings.FILES_SHARED_PREF);
-
-        Log.d("INSTA","changing photo");
-
-        if(files != null) {
-            while(files.remove("?"));
-
-            Random rand = new Random();
-            String file = files.get(rand.nextInt(files.size())).substring(7);
-            String currentFile = tinyDB.getString(Strings.CURRENT_BACKGROUND_IMAGE_URL);
-
-            if(currentFile != file){
-                tinyDB.putString(Strings.CURRENT_BACKGROUND_IMAGE_URL,file);
-                UtilityMethods.setWallpaper(context, BitmapFactory.decodeFile(file));
+            TinyDB tinyDB = new TinyDB(context);
+            List<String> files = tinyDB.getListString(Strings.FILES_SHARED_PREF);
+            if (files != null) {
+                while (files.remove("?")) ;
+                Random rand = new Random();
+                String currentFile = tinyDB.getString(Strings.CURRENT_BACKGROUND_IMAGE_URL);
+                files.remove(currentFile);
+                if (files.size() > 0) {
+                    String file = files.get(rand.nextInt(files.size()));
+                    tinyDB.putString(Strings.CURRENT_BACKGROUND_IMAGE_URL, file);
+                    UtilityMethods.setWallpaper(context, BitmapFactory.decodeFile(file));
+                }
             }
+        } catch (Exception e) {
+            //never crash
         }
     }
 }

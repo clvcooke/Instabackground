@@ -65,7 +65,7 @@ public class BackgroundSetter extends Activity {
             public void onClick(View v) {
                 TinyDB tinyDB = new TinyDB(context);
                 tinyDB.putBoolean("isRunning", true);
-                tinyDB.putListString(Strings.FILES_SHARED_PREF, imageGridAdapter.getUrls());
+                tinyDB.putListString(Strings.FILES_SHARED_PREF, imageGridAdapter.getCleanUrls());
                 AlarmReceiver alarmReceiver = new AlarmReceiver();
                 int seconds = (int) (Double.parseDouble(numberText.getText().toString()) * 3600);
                 tinyDB.putInt(Strings.SECONDS_SHARED_PREF, seconds);

@@ -171,6 +171,14 @@ public class ImageGridAdapter extends BaseAdapter {
         return urls;
     }
 
+    public ArrayList<String> getCleanUrls() {
+        ArrayList<String> urls = new ArrayList<>();
+        for (ImageHolder holder : imageHolders) {
+            urls.add(holder.url.substring(7));
+        }
+        return urls;
+    }
+
     private class ImageHolder {
         String url;
         boolean isToggled;
