@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
 import me.clvcooke.instabackground.Utilities.UtilityMethods;
@@ -24,10 +26,10 @@ import me.clvcooke.instabackground.Utilities.UtilityMethods;
 /**
  * Created by Colin on 2015-05-24.
  */
-public class UserPhotoGrid extends Activity {
+public class SavedPhotos extends Activity {
 
     ImageGridAdapter imageGridAdapter;
-    ArrayList<String> selectedURLS;
+    HashSet<String> selectedURLS;
     Button setButton;
     Context context;
     Menu mMenu;
@@ -41,10 +43,7 @@ public class UserPhotoGrid extends Activity {
         String username = extras.getString("user");
         context = this;
         setButton = (Button) findViewById(R.id.setButton);
-        selectedURLS = extras.getStringArrayList("selected");
-
-
-
+        selectedURLS = (HashSet<String>) extras.get("selected");
 
         GridView gridView = (GridView) findViewById(R.id.userGridView);
         gridView.setNumColumns(3);
@@ -88,7 +87,12 @@ public class UserPhotoGrid extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, BackgroundSetter.class);
-                intent.putStringArrayListExtra("urls", selectedURLS);
+                ArrayList<String> arrayList = new ArrayList<>();
+                Iterator<String> iterator = selectedURLS.iterator();
+                while (iterator.hasNext()){
+                    arrayList.add(iterator.next());
+                }
+                intent.putStringArrayListExtra("urls", arrayList);
                 startActivity(intent);
             }
         });
@@ -119,7 +123,7 @@ public class UserPhotoGrid extends Activity {
         inflater.inflate(R.menu.menu_picker, menu);
         mMenu = menu;
         if(selectedURLS == null){
-            selectedURLS = new ArrayList<String>();
+            selectedURLS = new HashSet<>();
         }
         if (!selectedURLS.isEmpty()) {
             changeSelectMode(true);
@@ -131,7 +135,7 @@ public class UserPhotoGrid extends Activity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.cancel:
-                selectedURLS = new ArrayList<String>();
+                selectedURLS = new HashSet<>();
                 imageGridAdapter.deselectAll();
                 changeSelectMode(false);
                 isSelecting = false;

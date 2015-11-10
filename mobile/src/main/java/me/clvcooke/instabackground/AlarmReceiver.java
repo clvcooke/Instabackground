@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -25,10 +26,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public void setAlarm(int timeInSeconds, Context context){
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),timeInSeconds*1000, alarmIntent);
+        Intent receiverIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 123456789, receiverIntent, 0);
+
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), timeInSeconds*1000, sender);
     }
 
     public void cancelAlarm(Context context){
@@ -39,6 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
         alarmManager.cancel(alarmIntent);
     }
+
 
 
     @Override

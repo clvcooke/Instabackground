@@ -21,7 +21,7 @@ import me.clvcooke.instabackground.R;
 /**
  * Created by Colin on 2015-05-24.
  */
-public class GalleryGridAdapter extends BaseAdapter {
+public class AlbumGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<String> mUrls;
@@ -30,7 +30,7 @@ public class GalleryGridAdapter extends BaseAdapter {
     private List<Boolean> isToggled;
     private int width;
 
-    public GalleryGridAdapter(Context c) {
+    public AlbumGridAdapter(Context c) {
         mContext = c;
         mInflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         width = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -71,7 +71,6 @@ public class GalleryGridAdapter extends BaseAdapter {
     }
 
     public void onItemLongClick(int position){
-
         //TODO options menu
     }
 
@@ -90,9 +89,11 @@ public class GalleryGridAdapter extends BaseAdapter {
         }
         ((TextView)layout.findViewById(R.id.text)).setText(users.get(position));
         image.setAdjustViewBounds(true);
-        Picasso.with(mContext).load(mUrls.get(position)).resize(width,width).into(image);
+        Picasso.with(mContext).load(mUrls.get(position)).resize(width,width).centerInside().placeholder(R.drawable.noimage).into(image);
         return layout;
     }
+
+
 
 
 }

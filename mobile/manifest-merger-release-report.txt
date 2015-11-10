@@ -61,7 +61,7 @@ ADDED from AndroidManifest.xml:17:9
 		ADDED from AndroidManifest.xml:21:13
 	android:name
 		ADDED from AndroidManifest.xml:20:13
-activity#me.clvcooke.instabackground.PhotoDisplayer
+activity#me.clvcooke.instabackground.Albums
 ADDED from AndroidManifest.xml:24:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:26:13
@@ -69,7 +69,7 @@ ADDED from AndroidManifest.xml:24:9
 		ADDED from AndroidManifest.xml:28:13
 	android:name
 		ADDED from AndroidManifest.xml:27:13
-activity#me.clvcooke.instabackground.UserPhotoGrid
+activity#me.clvcooke.instabackground.SavedPhotos
 ADDED from AndroidManifest.xml:32:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:33:13

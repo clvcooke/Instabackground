@@ -25,6 +25,6 @@ public class FullScreenPhotoActivity extends Activity {
         Picasso.with(this).load(
                 getIntent().getExtras().getString("url")
         ).resize(
-                width, width).into(imageView);
+                width, width).centerInside().into(imageView);
     }
 }

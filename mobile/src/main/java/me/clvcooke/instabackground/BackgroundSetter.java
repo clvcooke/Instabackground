@@ -2,6 +2,7 @@ package me.clvcooke.instabackground;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
 import me.clvcooke.instabackground.Constants.Strings;
@@ -29,8 +31,8 @@ public class BackgroundSetter extends Activity {
         ArrayList<String> urls = getIntent().getExtras().getStringArrayList("urls");
         setContentView(R.layout.background_setter);
         final Button removeButton = (Button) findViewById(R.id.removePhotos);
-        final Button backgroundButton = (Button) findViewById(R.id.setterButton);
-        backgroundButton.setEnabled(false);
+        final Button setRotationtimeButton = (Button) findViewById(R.id.setterButton);
+        setRotationtimeButton.setEnabled(false);
         final EditText numberText = (EditText) findViewById(R.id.time);
 
         GridView gridView = (GridView) findViewById(R.id.backgroundPhotos);
@@ -38,7 +40,7 @@ public class BackgroundSetter extends Activity {
 
         final ImageGridAdapter imageGridAdapter = new ImageGridAdapter(this);
         gridView.setAdapter(imageGridAdapter);
-        imageGridAdapter.loadUrls(urls, "");
+        imageGridAdapter.loadUrls(new HashSet<Integer>(), urls, "");
 
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -52,13 +54,13 @@ public class BackgroundSetter extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 imageGridAdapter.onItemClick(view, position);
-                removeButton.setEnabled(imageGridAdapter.getSelected().size() > 0);
+                removeButton.setEnabled(imageGridAdapter.minimumSelected());
             }
 
         });
 
 
-        backgroundButton.setOnClickListener(new View.OnClickListener() {
+        setRotationtimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TinyDB tinyDB = new TinyDB(context);
@@ -68,6 +70,11 @@ public class BackgroundSetter extends Activity {
                 int seconds = (int) (Double.parseDouble(numberText.getText().toString()) * 3600);
                 tinyDB.putInt(Strings.SECONDS_SHARED_PREF, seconds);
                 alarmReceiver.setAlarm(seconds, context);
+
+                //transition to control page
+                Intent intent = new Intent(context, ControlPage.class);
+                intent.putExtra("backgroundset", true);
+                startActivity(intent);
             }
         });
 
@@ -76,22 +83,25 @@ public class BackgroundSetter extends Activity {
             @Override
             public void onClick(View v) {
                 imageGridAdapter.removeSelected();
+                removeButton.setEnabled(false);
             }
         });
 
         numberText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (numberText.getText() == null || numberText.getText().length() == 0) {
-                    backgroundButton.setEnabled(false);
-                } else {
-                    backgroundButton.setEnabled(true);
+                try {
+                    if (numberText.getText() == null || numberText.getText().length() == 0) {
+                        setRotationtimeButton.setEnabled(false);
+                    } else if (Double.parseDouble(numberText.getText().toString()) > 0) {
+                        setRotationtimeButton.setEnabled(true);
+                    }
+                }catch (NumberFormatException e){
+                    //do nothing, its all good
                 }
                 return false;
             }
         });
-
-
 
 
     }

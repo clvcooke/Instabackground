@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import me.clvcooke.instabackground.Adapters.ImageGridAdapter;
@@ -114,20 +116,35 @@ public class UserFinder extends Activity {
                         }
 
 
-                        imageGridAdapter.loadUrls(urls, username);
+
+                        //make a hashmap of the last 28 chars of the url
+                        HashMap<String,Integer> urlEndings = new HashMap<>();
+
+                        for(int i = 0; i < urls.size(); i++){
+                            String url = urls.get(i);
+                            urlEndings.put(url.substring(url.length() - 32),i);
+                        }
+
+
+
+                        HashSet<Integer> urlsDownloaded = new HashSet<>();
+                        //TODO make this 2n
                         File[] files = UtilityMethods.getSavedFiles(UtilityMethods.DIRECTORY_PREFIX + username);
                         if (files != null) {
                             for (File file : files) {
-                                //TODO this will need to be updated when we can get more urls at once
-                                int i = 0;
-                                for (String url : urls) {
-                                    if (url.contains(file.getName())) {
-                                        urls.remove(i);
-                                        break;
-                                    }
-                                    i++;
+                                String fileName = file.getName();
+                                String substring = fileName.substring(fileName.length() - 32);
+                                if(urlEndings.containsKey(substring)){
+                                    urlsDownloaded.add(urlEndings.get(substring));
                                 }
                             }
+                        }
+
+                        imageGridAdapter.loadUrls(urlsDownloaded ,urls, username);
+
+
+                        if(urls.size() == 0){
+                            makeToast("No images found", context);
                         }
                         runOnUiThread(new Runnable() {
                             @Override
