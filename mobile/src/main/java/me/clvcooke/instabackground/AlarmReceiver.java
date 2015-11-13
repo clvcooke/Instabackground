@@ -28,9 +28,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Intent receiverIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, 123456789, receiverIntent, 0);
-
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), timeInSeconds * 1000, sender);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + timeInSeconds*1000, timeInSeconds * 1000, sender);
+        onReceive(context, null);
     }
 
     public void cancelAlarm(Context context) {
