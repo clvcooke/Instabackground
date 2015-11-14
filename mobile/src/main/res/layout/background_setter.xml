@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.05"
+        android:gravity="center"
+        android:text="Set Background"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <GridView
+        android:id="@+id/backgroundPhotos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:gravity="center_horizontal"
+        android:numColumns="3"
+        android:stretchMode="columnWidth" />
+
+    <Button
+        android:id="@+id/removePhotos"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:text="Remove Selected"
+        android:enabled="false"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/setterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Rotation Time" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:padding="8dp">
+
+            <EditText
+                android:layout_weight="0"
+                android:inputType="numberDecimal"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/time"/>
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="0"
+                android:layout_height="wrap_content"
+                android:text="Hours"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

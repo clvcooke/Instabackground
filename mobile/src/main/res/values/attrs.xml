@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OverlayToggleView">
+        <attr name="overlayVisibile" format="boolean"/>
+        <attr name="image" format="reference"/>
+    </declare-styleable>
+</resources>
