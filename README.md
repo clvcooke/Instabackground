@@ -2,7 +2,7 @@ InstaBackground
 ===============
 Your favourite food pictures are now your background!
 
-####Getting started
+####Getting started with development
 **Install Android Studio**
 - The most recent version can be found here: http://developer.android.com/sdk/index.html
 - If you have a previous version installed then you can either update or uninstall/reinstall
@@ -44,3 +44,6 @@ For example an object which asynchronously gathers photos from Instagram could b
 - ClassesAreNamedLikeThis
 - functionsAreNamedLikeThis
 - variablesAreNamedLikeThis
+
+##Questions
+If there are any questions, feel free to send an email to clvcooke@gmail.com
