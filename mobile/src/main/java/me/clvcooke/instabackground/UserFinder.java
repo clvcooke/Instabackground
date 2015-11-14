@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,12 +37,14 @@ public class UserFinder extends Activity {
 
     private final String INSTAGRAM_URL_PREFIX = "https://instagram.com/";
     private ImageGridAdapter imageGridAdapter;
+    private Activity activity;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_page);
+        activity = this;
 
 
         Button searchButton = (Button) findViewById(R.id.search_button);
@@ -69,7 +74,18 @@ public class UserFinder extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageGridAdapter.saveSelected();
+
+                // Here, thisActivity is the current activity
+                if (ContextCompat.checkSelfPermission(activity,
+                        "android.permission.WRITE_EXTERNAL_STORAGE")
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"},
+                            0);
+                } else {
+                    imageGridAdapter.saveSelected();
+                }
             }
         });
 
