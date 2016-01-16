@@ -2,6 +2,9 @@ InstaBackground
 ===============
 Your favourite food pictures are now your background!
 
+
+[Play Store link](https://play.google.com/store/apps/details?id=me.clvcooke.instabackground&hl=en)
+
 ####Getting started with development
 **Install Android Studio**
 - The most recent version can be found here: http://developer.android.com/sdk/index.html
